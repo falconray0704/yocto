@@ -9,8 +9,8 @@ set -o errexit
 . ../../libShell/sysEnv.lib
 
 BUILD_DIR_6Q_FB="6q_fb"
-#BUILD_DIR_6Q_X11="6q_x11"
-BUILD_DIR_6Q_X11="build_x11"
+BUILD_DIR_6Q_X11="6q_x11"
+#BUILD_DIR_6Q_X11="build_x11"
 
 custom_rel_fs_fb_qt_func()
 {
@@ -37,7 +37,7 @@ rel_fs_fb_qt_func()
     TARGETFS_NAME="${BUILD_DIR}-${ORGFS_REAL_NAME/.bz2/.gz}"
     echoC "Target name:${TARGETFS_NAME}"
     TMP_STR=${ORGFS_REAL_NAME##*-}
-    TARGETFS_DATA=${TMP_STR%%.*}
+#    TARGETFS_DATA=${TMP_STR%%.*}
 #	echoC "Target name:${TARGETFS_DATA}"
 
     rm -rf rootfs
@@ -56,6 +56,32 @@ rel_fs_fb_qt_func()
     popd
 }
 
+rel_sdk_fb_qt_func()
+{
+    BUILD_DIR=$1
+    ORGFS_PATH="/yocto/${BUILD_DIR}/tmp/deploy/images/imx6qsabresd/fsl-image-qt5-imx6qsabresd.tar.bz2"
+    ORGSDK_PATH="/yocto/${BUILD_DIR}/tmp/deploy/sdk/fsl-imx-fb-glibc-x86_64-fsl-image-qt5-cortexa9hf-neon-toolchain-4.1.15-2.1.0.sh"
+
+    pushd /yocto
+    mkdir -p rel_6q
+
+    pushd rel_6q
+
+    ORGFS_REAL_NAME=$(readlink ${ORGFS_PATH})
+    TMP_STR=${ORGFS_REAL_NAME##*-}
+    TARGETFS_DATE=${TMP_STR%%.*}
+
+    TMP_STR=${ORGSDK_PATH##*/}
+    TARGETSDK_NAME="${TARGETFS_DATE}-${TMP_STR}"
+
+    cp ${ORGSDK_PATH} ${TARGETSDK_NAME}
+
+    popd
+
+    popd
+}
+
+
 usage_func()
 {
     echoY "./rel.sh <cmd> <target>"
@@ -63,7 +89,7 @@ usage_func()
     echoY "Supported cmds:"
     echo "[ rel ]"
     echoY "Supported targets:"
-    echo "[ fs_fb_qt, fs_x11_qt ]"
+    echo "[ fs_fb_qt, fs_x11_qt, sdk_fb_qt, sdk_x11_qt ]"
 }
 
 is_root_func
@@ -80,6 +106,14 @@ case $1 in
         then
             echoY "Releasing $2 ..."
             rel_fs_fb_qt_func ${BUILD_DIR_6Q_X11}
+        elif [ $2 == "sdk_fb_qt" ]
+        then
+            echoY "Releasing $2 ..."
+            rel_sdk_fb_qt_func ${BUILD_DIR_6Q_FB}
+        elif [ $2 == "sdk_x11_qt" ]
+        then
+            echoY "Releasing $2 ..."
+            rel_sdk_fb_qt_func ${BUILD_DIR_6Q_X11}
         else
             echoY "rel command supported targets:"
             echo "[ fs_fb_qt, fs_x11_qt ]"
