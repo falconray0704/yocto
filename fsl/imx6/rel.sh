@@ -8,11 +8,14 @@ set -o errexit
 . ../../libShell/echo_color.lib
 . ../../libShell/sysEnv.lib
 
-BUILD_DIR_6Q_FB="6q_fb"
-BUILD_DIR_6Q_X11="6q_x11"
+GRAPHICAL_BACKEND_FB="fb"
+GRAPHICAL_BACKEND_X11="x11"
+
+BUILD_DIR_6Q_FB="6q_${GRAPHICAL_BACKEND_FB}"
+BUILD_DIR_6Q_X11="6q_${GRAPHICAL_BACKEND_X11}"
 #BUILD_DIR_6Q_X11="build_x11"
 
-custom_rel_fs_fb_qt_func()
+custom_rel_fs_qt_func()
 {
 	sed -i "s/^galcore/#galcore/" rootfs/etc/modules-load.d/galcore.conf
 	sed -i "s/^nfsd/#nfsd/" rootfs/etc/modules-load.d/nfsd.conf
@@ -21,9 +24,10 @@ custom_rel_fs_fb_qt_func()
 	cat rootfs/etc/modules-load.d/nfsd.conf
 }
 
-rel_fs_fb_qt_func()
+rel_fs_qt_func()
 {
     BUILD_DIR=$1
+
     ORGFS_PATH="/yocto/${BUILD_DIR}/tmp/deploy/images/imx6qsabresd/fsl-image-qt5-imx6qsabresd.tar.bz2"
 
     pushd /yocto
@@ -45,7 +49,7 @@ rel_fs_fb_qt_func()
 
     tar -jxf ${ORGFS_REAL_PATH} -C rootfs/
 
-    custom_rel_fs_fb_qt_func
+    custom_rel_fs_qt_func
 
     tar -zcf ${TARGETFS_NAME} rootfs
 
@@ -56,11 +60,13 @@ rel_fs_fb_qt_func()
     popd
 }
 
-rel_sdk_fb_qt_func()
+rel_sdk_qt_func()
 {
     BUILD_DIR=$1
+    GRAPHICAL_BACKEND=$2
+
     ORGFS_PATH="/yocto/${BUILD_DIR}/tmp/deploy/images/imx6qsabresd/fsl-image-qt5-imx6qsabresd.tar.bz2"
-    ORGSDK_PATH="/yocto/${BUILD_DIR}/tmp/deploy/sdk/fsl-imx-fb-glibc-x86_64-fsl-image-qt5-cortexa9hf-neon-toolchain-4.1.15-2.1.0.sh"
+    ORGSDK_PATH="/yocto/${BUILD_DIR}/tmp/deploy/sdk/fsl-imx-${GRAPHICAL_BACKEND}-glibc-x86_64-fsl-image-qt5-cortexa9hf-neon-toolchain-4.1.15-2.1.0.sh"
 
     pushd /yocto
     mkdir -p rel_6q
@@ -101,19 +107,19 @@ case $1 in
         if [ $2 == "fs_fb_qt" ]
         then
             echoY "Releasing $2 ..."
-            rel_fs_fb_qt_func ${BUILD_DIR_6Q_FB}
+            rel_fs_qt_func ${BUILD_DIR_6Q_FB}
         elif [ $2 == "fs_x11_qt" ]
         then
             echoY "Releasing $2 ..."
-            rel_fs_fb_qt_func ${BUILD_DIR_6Q_X11}
+            rel_fs_qt_func ${BUILD_DIR_6Q_X11}
         elif [ $2 == "sdk_fb_qt" ]
         then
             echoY "Releasing $2 ..."
-            rel_sdk_fb_qt_func ${BUILD_DIR_6Q_FB}
+            rel_sdk_qt_func ${BUILD_DIR_6Q_FB} ${GRAPHICAL_BACKEND_FB}
         elif [ $2 == "sdk_x11_qt" ]
         then
             echoY "Releasing $2 ..."
-            rel_sdk_fb_qt_func ${BUILD_DIR_6Q_X11}
+            rel_sdk_qt_func ${BUILD_DIR_6Q_X11} ${GRAPHICAL_BACKEND_X11}
         else
             echoY "rel command supported targets:"
             echo "[ fs_fb_qt, fs_x11_qt ]"
