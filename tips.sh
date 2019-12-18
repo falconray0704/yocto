@@ -67,7 +67,44 @@ ct-Cookbook-Second-Edition"
     echo "http://git.openembedded.org/openembedded-core/"
     echo ""
     echoC "Get official Yocto Project documentation:"
-    echo " http://www.yoctoproject.org/docs/"
+    echo "http://www.yoctoproject.org/docs/"
+    echo ""
+    echoC "Get layers for Yocto project:"
+    echo "http://layers.openembedded.org/"
+    echo ""
+    echoC 'Get freescale community layer "meta-freescale":'
+    echo 'http://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale/'
+    echo ""
+    echoC 'Discussion on freescale community layer "meta-freescale":'
+    echo 'https://lists.yoctoproject.org/listinfo/meta-freescale'
+    echo ""
+    echoC 'Get Linux kernel and U-boot in freescale community layer "meta-freescale":'
+    echo "    The meta-freescale layer provides both the i.MX6 Linux kernel and the U-Boot
+    source either from NXP's or from FSL community BSP maintained repositories
+    using the following links:"
+    echoG "    NXP's Linux kernel Git repository:"
+    echo "    http://git.freescale.com/git/cgit.cgi/imx/linux-imx.git/"
+    echoG "    FSL community Linux kernel Git:"
+    echo "    repository: https://github.com/Freescale/linux-fslc.git"
+    echoG "    NXP's U-Boot Git repository:"
+    echo "    http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/"
+    echoG "    FSL community U-Boot Git:"
+    echo "    repository: https://github.com/Freescale/u-boot-fslc.git"
+    echo ""
+    echoC 'Get freescale support layer(meta-freescale-3rdparty) for other community maintained boards:'
+    echo 'https://github.com/Freescale/meta-freescale-3rdparty/'
+    echo ""
+    echoC "Get freescale demonstration images' layer(meta-freescale-distro):"
+    echo 'https://github.com/Freescale/meta-freescale-distro'
+    echo ""
+    echoC "Get release layer(meta-fsl-bsp-release) that is used in the official NXP software releases:"
+    echo 'http://git.freescale.com/git/cgit.cgi/imx/meta-fsl-bsp-release.git/'
+    echo ""
+    echoC "FSL community BSP web page:"
+    echo 'http://freescale.github.io/'
+    echo ""
+    echoC "NXP's official support community:"
+    echo 'https://community.nxp.com/'
     echo ""
 
 }
