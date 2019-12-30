@@ -7,6 +7,16 @@ set -o errexit
 
 . ./libShell/echo_color.lib
 
+show_reop_usage_func()
+{
+    echoG "Instructions to use the repo tool:"
+    echo "    Including using repo with proxy servers, can be 
+    found in the Android documentation at:"
+    echo "    https://source.android.com/setup/downloading"
+    echo ""
+
+}
+
 bitbake_working_flow_parsing_func()
 {
     echoC 'Parsing flow of bitbake:'
@@ -41,6 +51,70 @@ bitbake_working_flow_func()
 {
     bitbake_working_flow_parsing_func
     bitbake_working_flow_cooking_func
+}
+
+show_fsl_layers_info_func()
+{
+    echoG "meta-freescale:"
+    echo "    This is the community layer that supports NXP reference 
+    designs. It has a dependency on OpenEmbedded-Core. Machines in this layer 
+    will be maintained even after NXP stops active development on them. You can 
+    download meta-freescale from its Git repository at 
+    http://git.yoctoproject.org/cgit/cgit.cgi/meta-freescale/.
+    
+    The meta-freescale layer provides both the i.MX6 Linux kernel and the U-Boot 
+    source either from NXP's or from FSL community BSP maintained repositories 
+    using the following links: 
+        NXP's Linux kernel Git repository: 
+        http://git.freescale.com/git/cgit.cgi/imx/linux-imx.git/ 
+        FSL community Linux kernel Git 
+        repository: https://github.com/Freescale/linux-fslc.git 
+        NXP's U-Boot Git repository: 
+        http://git.freescale.com/git/cgit.cgi/imx/uboot-imx.git/ 
+        FSL community U-Boot Git 
+        repository: https://github.com/Freescale/u-boot-fslc.git"
+    echo ""
+
+    echoG "meta-freescale-3rdparty:"
+    echo "    This layer adds support for other communitymaintained boards, 
+    for example, the Wandboard. To download the layer's 
+    content, you may visit: 
+    https://github.com/Freescale/meta-freescale-3rdparty/."
+    echo ""
+
+    echoG "meta-freescale-distro:"
+    echo "    This layer adds a metadata layer for demonstration 
+    target images. To download the layer's content, you may visit:
+    https://github.com/Freescale/meta-freescale-distro."
+    echo ""
+
+    echoG "meta-fsl-bsp-release:"
+    echo "    This is an NXP-maintained layer that is used in the 
+    official NXP software releases. It contains modifications to 
+    both meta-freescale and meta-freescale-distro. It is not part of 
+    the community release but can be accessed at: 
+    http://git.freescale.com/git/cgit.cgi/imx/meta-fsl-bsp-release.git/."
+    echo ""
+
+    echoG "See also:"
+    echo "    For more information, refer to the FSL community BSP 
+    web page available at:
+    http://freescale.github.io/ 
+    NXP's official support community can be accessed at:
+    https://community.nxp.com/"
+    echo ""
+
+}
+
+show_fsl_yocto_info_func()
+{
+    echoG "To list the hardware boards supported by the different layers, we may run:"
+    echo "    $ ls sources/meta-freescale*/conf/machine/*.conf"
+    echo ""
+    echoG "And to list the newly introduced target images, use the following:"
+    echo "    $ ls sources/meta-freescale*/recipes*/images/*.bb"
+    echo "    $ ll sources/meta-fsl-bsp-release/imx/meta-sdk/recipes-*/images/*.bb"
+    echo ""
 }
 
 get_resources_func()
@@ -147,6 +221,9 @@ tips_help_func()
     echo '001) [ resource ]        Tips for obtain resources of Yocto.'
     echo '002) [ build ]           Tips for setup build environment.'
     echo '003) [ bbWorkFlow ]      Tips for show working flow of bitbake.'
+    echo '004) [ fslLayers ]       Tips for show informations of the layers that FSL community BSP extends Poky with .'
+    echo '005) [ fslInfo ]         Tips for show informations of current fsl Yocto project.'
+    echo '006) [ repo ]            Tips for repo usage.'
 }
 
 [ $# -lt 1 ] && tips_help_func && exit
@@ -160,6 +237,15 @@ case $1 in
         ;;
     "bbWorkFlow") echoY '003) [ bbWorkFlow ]      Tips for show working flow of bitbake.'
         bitbake_working_flow_func
+        ;;
+    "fslLayers") echoY '004) [ fslLayers ]       Tips for show informations of the layers that FSL community BSP extends Poky with .'
+        show_fsl_layers_info_func
+        ;;
+    "fslInfo") echoY '005) [ fslInfo ]         Tips for show informations of current fsl Yocto project.'
+        show_fsl_yocto_info_func
+        ;;
+    "repo") echoY '006) [ repo ]            Tips for repo usage.'
+        show_reop_usage_func
         ;;
     *) echo "Unknown command:"
         tips_help_func 

@@ -22,6 +22,12 @@ custom_rel_fs_qt_func()
 
 	cat rootfs/etc/modules-load.d/galcore.conf
 	cat rootfs/etc/modules-load.d/nfsd.conf
+
+#    echo '#iForceCommand cvs server' >> rootfs/etc/sshd/sshd_config
+#    echo 'Ciphers aes128-cbc,aes192-cbc,aes256-cbc,aes128-ctr,aes192-ctr,aes256-ctr,3des-cbc,arcfour128,arcfour256,arcfour,blowfish-cbc,cast128-cbc' >> rootfs/etc/sshd/sshd_config
+#    echo 'MACs hmac-md5,hmac-sha1,umac-64@openssh.com,hmac-ripemd160,hmac-sha1-96,hmac-md5-96' >> rootfs/etc/sshd/sshd_config
+#    echo 'KexAlgorithms diffie-hellman-group1-sha1,diffie-hellman-group14-sha1,diffie-hellman-group-exchange-sha1,diffie-hellman-group-exchange-sha256,ecdh-sha2-nistp256,ecdh-sha2-nistp384,ecdh-sha2-nistp521,diffie-hellman-group1-sha1,curve25519-sha256@libssh.org' >> rootfs/etc/sshd/sshd_config
+    
 }
 
 rel_fs_qt_func()
