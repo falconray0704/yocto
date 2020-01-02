@@ -212,6 +212,10 @@ setup_build_func()
     echoC "Test run your images on the QEMU emulator:"
     echo 'runqemu qemuarm core-image-minimal'
     echo ""
+    echoC "Clean/Rebuild target:"
+    echo "bitbake -f -c compile <target>"
+    echo "bitbake <target>"
+    echo ""
 }
 
 tips_help_func()
