@@ -180,6 +180,9 @@ ct-Cookbook-Second-Edition"
     echoC "NXP's official support community:"
     echo 'https://community.nxp.com/'
     echo ""
+    echoC "The FSL community BSP manifest can be accessed at:"
+    echo "https://github.com/Freescale/fsl-community-bsp-platform/blob/rocko/default.xml"
+    echo ""
 
 }
 
@@ -215,6 +218,11 @@ setup_build_func()
     echoC "Clean/Rebuild target:"
     echo "bitbake -f -c compile <target>"
     echo "bitbake <target>"
+    echo ""
+    echoC "Build the release notes in both HTML and PDF versions we do:"
+    echo "$ cd /opt/yocto/fsl-community-bsp/sources/Documentation/release-notes"
+    echo "$ make latexpdf singlehtml"
+    echoY "Note: The documents can be found inside the build/latex and build/singlehtml directories."
     echo ""
 }
 
