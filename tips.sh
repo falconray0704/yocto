@@ -7,6 +7,33 @@ set -o errexit
 
 . ./libShell/echo_color.lib
 
+show_toaster_usage_func()
+{
+    echoG "Setup running environment:"
+    echo "$ sudo apt-get install python3-pip"
+    echo "$ pip3 install --user -r /opt/yocto/poky/bitbake/toaster-requirements.txt"
+    echo ""
+    echoG "How to start Toaster:"
+    echo "$ cd /opt/yocto/poky"
+    echo "$ source oe-init-build-env"
+    echo "$ source toaster start"
+    echo "or"
+    echo "source toaster start webport=<IP>:<PORT>"
+    echo ""
+    echoG "How to stop  Toaster:"
+    echo "source toaster stop"
+    echo ""
+    echoG "The version of Django that Toaster uses is specified on:"
+    echo "/opt/yocto/poky/bitbake/toaster-requirements.txt"
+    echo ""
+    echoG "The backend configuration is done in:"
+    echo "/opt/yocto/poky/bitbake/lib/toaster/toastermain/settings.py"
+    echo ""
+    echoG "The initial state of the database is created from a set of fixtures (data dumps) under:"
+    echo "/opt/yocto/poky/bitbake/lib/toaster/orm/fixtures"
+    echo ""
+}
+
 show_reop_usage_func()
 {
     echoG "Instructions to use the repo tool:"
@@ -236,6 +263,7 @@ tips_help_func()
     echo '004) [ fslLayers ]       Tips for show informations of the layers that FSL community BSP extends Poky with .'
     echo '005) [ fslInfo ]         Tips for show informations of current fsl Yocto project.'
     echo '006) [ repo ]            Tips for repo usage.'
+    echo '007) [ toaster ]         Tips for toaster usage.'
 }
 
 [ $# -lt 1 ] && tips_help_func && exit
@@ -258,6 +286,9 @@ case $1 in
         ;;
     "repo") echoY '006) [ repo ]            Tips for repo usage.'
         show_reop_usage_func
+        ;;
+    "toaster") echoY '007) [ toaster ]         Tips for toaster usage.'
+        show_toaster_usage_func
         ;;
     *) echo "Unknown command:"
         tips_help_func 
