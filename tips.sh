@@ -7,6 +7,82 @@ set -o errexit
 
 . ./libShell/echo_color.lib
 
+show_yocto_config_func()
+{
+    echoG 'Configure a pre-mirror:'
+    echo 'For example, add the following to your conf/local.conf file:'
+    echo 'INHERIT += "own-mirrors"'
+    echo 'SOURCE_MIRROR_URL = "http://example.com/my-source-mirror"'
+    echo ""
+    echoG "Configure the build server to prepare tarballs of the Git 
+    directories to avoid having to perform Git operations from upstream servers:"
+    echo 'BB_GENERATE_MIRROR_TARBALLS = "1"'
+    echoY 'Note:This setting in your conf/local.conf file will affect the build performance,
+    but this is usually acceptable in a build server.'
+    echoY 'Note:In order to test this setup, you may check to see whether a build is 
+    possible just by using the pre-mirrors with the following:'
+    echo 'BB_FETCH_PREMIRRORONLY = "1"'
+    echo ""
+    echoG 'Configure an NFS share drive to be shared among the development team:'
+    echo 'Add the following to your conf/local.conf configuration file:'
+    echo 'SSTATE_MIRRORS ?= "file://.* file:///nfs/local/mount/sstate/PATH"'
+    echo ""
+    echoG 'Configure shared state cache sharing via HTTP:'
+    echo 'Add the following to your conf/local.conf configuration file:'
+    echo 'SSTATE_MIRRORS ?= "file://.* http://example.com/some_path/sstate-cache/PATH"'
+    echo ""
+    echoG 'Add package-management feature to your root filesystem:'
+    echo "Add the following line to your project's conf/local.conf file:"
+    echo 'EXTRA_IMAGE_FEATURES += "package-management"'
+    echo ""
+    echoG "Run the simplest PR server locally on your host system:"
+    echo 'To do this, you add the following to your conf/local.conf file:'
+    echo 'PRSERV_HOST = "localhost:0"'
+    echoY "Note: The PR server is not enabled by default. The packages generated without a PR
+    server are consistent with each other but offer no update guarantees for a system that is
+    already running."
+    echo ""
+    echoG 'Run a single instance of the PR server by running the following command:'
+    echo '$ bitbake-prserv --host <server_ip> --port <port> --start'
+    echoY "Note: And you will update the project's build configuration to use the centralized PR server,
+    editing conf/local.conf as follows:"
+    echo 'PRSERV_HOST = "<server_ip>:<port>"'
+    echo ""
+    echoG 'To enable build history:'
+    echo 'Add the following to your conf/local.conf file:'
+    echo 'INHERIT += "buildhistory"'
+    echo ""
+    echoG 'To enable the storage of build history in a local Git repository:'
+    echo 'Add the following line to the conf/local.conf configuration file as well:'
+    echo 'BUILDHISTORY_COMMIT = "1"'
+    echoY 'Note: Configure Git repository location for buildhistory:
+    Set the BUILDHISTORY_DIR variable, which by default is set to 
+    a buildhistory directory on your build directory.'
+    echo ""
+    echoG  'Configure build history tracks changes:'
+    echo "Track only image changes, add the following to your conf/local.conf:"
+    echo 'BUILDHISTORY_FEATURES = "image"'
+    echoY 'Note: By default, buildhistory tracks changes to packages, images, and SDKs.'
+    echo ""
+    echoG 'Configure build history tracks specific files:'
+    echo 'The files need to be added with the BUILDHISTORY_IMAGE_FILES variable 
+    in your conf/local.conf file, as follows:'
+    echo 'BUILDHISTORY_IMAGE_FILES += "/path/to/file"'
+    echoY 'Note: By default, this includes only /etc/passwd and /etc/groups, 
+    but it can be used to track any important files, such as security certificates.'
+    echo ""
+    echoG 'Enable the collection of statistics'
+    echo 'Your project needs to inherit the buildstats class by
+    adding it to USER_CLASSES in your conf/local.conf file:'
+    echo 'USER_CLASSES ?= "buildstats"'
+    echoY 'Note: You can configure the location of these statistics with 
+    the BUILDSTATS_BASE variable, and by default it is set to the buildstats 
+    folder in the tmp directory under the build directory (tmp/buildstats).'
+
+
+
+}
+
 show_toaster_usage_func()
 {
     echoG "Setup running environment:"
@@ -210,6 +286,12 @@ ct-Cookbook-Second-Edition"
     echoC "The FSL community BSP manifest can be accessed at:"
     echo "https://github.com/Freescale/fsl-community-bsp-platform/blob/rocko/default.xml"
     echo ""
+    echoC "More information and a user manual for the dnf utility can be found at:"
+    echo "http://dnf.readthedocs.io/en/latest/index.html"
+    echo ""
+    echoC "The GNUPG documentation can be accessed at:"
+    echo "https://www.gnupg.org/documentation/"
+    echo ""
 
 }
 
@@ -264,6 +346,7 @@ tips_help_func()
     echo '005) [ fslInfo ]         Tips for show informations of current fsl Yocto project.'
     echo '006) [ repo ]            Tips for repo usage.'
     echo '007) [ toaster ]         Tips for toaster usage.'
+    echo '008) [ cfg ]             Tips for configuration of build.'
 }
 
 [ $# -lt 1 ] && tips_help_func && exit
@@ -289,6 +372,9 @@ case $1 in
         ;;
     "toaster") echoY '007) [ toaster ]         Tips for toaster usage.'
         show_toaster_usage_func
+        ;;
+    "cfg") echoY '008) [ cfg ]             Tips for configuration of build.'
+        show_yocto_config_func
         ;;
     *) echo "Unknown command:"
         tips_help_func 
