@@ -7,6 +7,100 @@ set -o errexit
 
 . ./libShell/echo_color.lib
 
+show_debug_func()
+{
+    echoG 'Search for specific recipes on the configured layers, 
+    with the preferred version appearing first:'
+    echo '$ bitbake-layers show-recipes "<package_name>"'
+    echo ""
+    echoG 'Search on recipe or package names, description and install files 
+    in the context of developing recipes metadata with regular expression 
+    in dependency cache:'
+    echo '$ devtool search <regular expression>'
+    echoY "To use devtool, the environment needs to be previously set up, 
+    and the shared state cache populated:"
+    echo "$ cd /opt/yocto/fsl-community-bsp"
+    echo "$ source setup-environment wandboard"
+    echo "$ bitbake <target-image>"
+    echo "$ devtool search gdb 
+    Loaded 2323 entries from dependency cache. 
+    perl Perl scripting language 
+    shared-mime-info Shared MIME type database and specification 
+    bash-completion Programmable Completion for Bash 4 
+    glib-2.0 A general-purpose utility library 
+    python The Python Programming Language 
+    gdbm Key/value database library with extensible hashing 
+    gcc-runtime Runtime libraries from GCC"
+    echo ""
+    echoG "Dumpping BitBake's the global environment:"
+    echo "$ bitbake -e | grep -w <key word>"
+    echo ""
+    echoG "To locate the source directory for a specific package recipe use:"
+    echo "$ bitbake -e <name of package recipe> | grep ^S="
+    echo ""
+    echoG "To locate the working directory for a package or image recipe:"
+    echo "$ bitbake -e <target> | grep ^WORKDIR="
+    echo ""
+    echoG "Start development shell:"
+    echo "$ bitbake -c devshell <target>"
+    echo "or"
+    echo "$ bitbake -c devpyshell <target>"
+    echo ""
+    echoG "To list all the tasks available for a given recipe:"
+    echo '$ bitbake -c listtasks <target>'
+    echo ""
+    echoG "To recreate the error, you can force a build with the following:"
+    echo "$ bitbake -f <target>"
+    echo ""
+    echoG "Ask BitBake to force-run only a specific task:"
+    echo '$ bitbake -c <task> -f <target>'
+    echo "eg:"
+    echo '$ bitbake -c compile -f <target>'
+    echo ""
+    echoG "Ask BitBake to clean a specific recipe:"
+    echo '$ bitbake -c clean <target>'
+    echo ""
+    echoG "Print the current and provided versions of packages:"
+    echo "$ bitbake --show-versions"
+    echo ""
+    echoG "To see an overview of pulled-in dependencies:"
+    echo "$ bitbake -v <target>"
+    echo ""
+    echoG "To analyze what dependencies are pulled in by a package:"
+    echo "$ bitbake -g <target>"
+    echo "To omit dependencies from glibc:"
+    echo "$ bitbake -g <target> -I glibc"
+    echoY "Once the preceding commands have been run, 
+    we get the following files in the current directory:"
+    echo "    pn-buildlist: This file shows the list of packages that would be built by the given target 
+    recipes-depends.dot: This file shows the dependencies between recipes 
+    task-depends.dot: This file shows the dependencies between tasks"
+    echo ""
+    echoG "To convert the .dot files to postscript files (.ps):"
+    echo "$ dot -Tps filename.dot -o outfile.ps"
+    echo ""
+    echoG "To convert the .dot files to png files:"
+    echo "$ dot -Tpng filename.dot -o outfile.png"
+    echo ""
+    echoG "Ask BitBake to display it graphically with the dependency explorer:"
+    echo "$ bitbake -g -u taskexp <target>"
+    echo ""
+    echoG "To check errors from the community itself:"
+    echo "http://errors.yoctoproject.org"
+    echo ""
+    echoG "Submit your own build failure to the database to help the community debug the problem.
+    To do so, you may use the report-error class. Add the following to your conf/local.conf file:"
+    echo 'INHERIT += "report-error"'
+    echoY "Note: The error information is stored under tmp/log/error-report under the build
+    directory, but you can set a specific location with the ERR_REPORT_DIR variable.
+    When the error reporting tool is activated, a build error will be captured in a file in the
+    error-report folder. The build output will also print a command to send the error log to
+    the server:"
+    echo '$ send-error-report ${LOG_DIR}/error-report/error-report_${TSTAMP}'
+    echoY "When this command is executed, it will report back with a link to the upstream error."
+    echo ""
+}
+
 show_yocto_config_func()
 {
     echoG 'Configure a pre-mirror:'
@@ -292,6 +386,9 @@ ct-Cookbook-Second-Edition"
     echoC "The GNUPG documentation can be accessed at:"
     echo "https://www.gnupg.org/documentation/"
     echo ""
+    echoC "To check errors from the community itself:"
+    echo "http://errors.yoctoproject.org"
+    echo ""
 
 }
 
@@ -347,6 +444,7 @@ tips_help_func()
     echo '006) [ repo ]            Tips for repo usage.'
     echo '007) [ toaster ]         Tips for toaster usage.'
     echo '008) [ cfg ]             Tips for configuration of build.'
+    echo '009) [ debug ]           Tips for debuging of build.'
 }
 
 [ $# -lt 1 ] && tips_help_func && exit
@@ -375,6 +473,9 @@ case $1 in
         ;;
     "cfg") echoY '008) [ cfg ]             Tips for configuration of build.'
         show_yocto_config_func
+        ;;
+    "debug") echoY '009) [ debug ]           Tips for debuging of build.'
+        show_debug_func
         ;;
     *) echo "Unknown command:"
         tips_help_func 
