@@ -7,6 +7,18 @@ set -o errexit
 
 . ./libShell/echo_color.lib
 
+show_bsp_layer_func()
+{
+    echoG "Create a custom bsp layer:"
+    echo '$cd <fsl-community-bsp directory>'
+    echo '$source setup-environment <reference boards. eg: wandboard>'
+    echo '$cd <fsl-community-bsp directory>/source'
+    echo 'yocto-layer create <bsp-custom>'
+    echo 'or'
+    echo 'yocto-layer create meta-bsp-<bsp-custom>'
+    echo ""
+}
+
 show_debug_func()
 {
     echoG 'Search for specific recipes on the configured layers, 
@@ -445,6 +457,7 @@ tips_help_func()
     echo '007) [ toaster ]         Tips for toaster usage.'
     echo '008) [ cfg ]             Tips for configuration of build.'
     echo '009) [ debug ]           Tips for debuging of build.'
+    echo '010) [ bspLayer ]        Tips for maintaining bsp layer(Including create, modify, and any other usage).'
 }
 
 [ $# -lt 1 ] && tips_help_func && exit
@@ -476,6 +489,9 @@ case $1 in
         ;;
     "debug") echoY '009) [ debug ]           Tips for debuging of build.'
         show_debug_func
+        ;;
+    "bspLayer") echoY '010) [ bspLayer ]        Tips for maintaining bsp layer(Including create, modify, and any other usage).'
+        show_bsp_layer_func
         ;;
     *) echo "Unknown command:"
         tips_help_func 
