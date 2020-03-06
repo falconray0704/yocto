@@ -115,6 +115,9 @@ show_debug_func()
 
 show_yocto_config_func()
 {
+    echoG "Check pocky version of current Yocto Project."
+    echo "Value DISTRO_CODENAME in /<BSP-DIR>/sources/poky/meta-yocto/conf/distro/poky.conf"
+    echo ""
     echoG 'Configure a pre-mirror:'
     echo 'For example, add the following to your conf/local.conf file:'
     echo 'INHERIT += "own-mirrors"'
